@@ -1,0 +1,40 @@
+mixin game-intro(gameTitle)
+    div.jumbotron#game-intro
+        h1= gameTitle
+        p.
+            You are fighting something.  You don't know what it is because I have no idea either.
+            You have three attributes: health, strength, and sanity.  All three are automatically tracked by the game,
+            but <strong class="text-success">you only get one</strong> of them that you can see.
+        p
+            button#start-game.btn.btn-primary.btn-lg(role="button") Start game! 
+                i.fa.fa-flip-horizontal.fa-truck
+
+mixin stat-chooser()
+    div.well.well-lg#stat-chooser(style="display:none;")
+        h1 Choose your stat!
+        div.row
+            div.col-md-4
+                div.panel.panel-default
+                    div.panel-heading
+                        h3.panel-title Health
+                            button.btn.btn-primary.btn-xs.pull-right.health(type="button") Choose 
+                                i.fa.fa-angle-double-right
+                    div.panel-body
+                        p.
+                            Herp derp content goes here later
+            div.col-md-4
+                div.panel.panel-default
+                    div.panel-heading: h3.panel-title Strength
+                            button.btn.btn-primary.btn-xs.pull-right.strength(type="button") Choose 
+                                i.fa.fa-angle-double-right
+                    div.panel-body
+                        p.
+                            Herp derp content goes here later
+            div.col-md-4
+                div.panel.panel-default
+                    div.panel-heading: h3.panel-title Sanity
+                            button.btn.btn-primary.btn-xs.pull-right.sanity(type="button") Choose 
+                                i.fa.fa-angle-double-right
+                    div.panel-body
+                        p.
+                            Herp derp content goes here later

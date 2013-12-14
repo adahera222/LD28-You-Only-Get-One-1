@@ -8,11 +8,9 @@ module.exports = (grunt) ->
       compileDev:
         options:
           sourceMap: no
+          bare: yes
         files:
-          "out/js/main.js": "src/coffee/*.coffee"
-      compile:
-        files:
-          "out/js/main.js": "src/coffee/*.coffee"
+          "out/js/main.js": ["src/coffee/*.coffee", "!src/coffee/main.coffee", "src/coffee/main.coffee"]
     connect:
       serveDev:
         options:
@@ -29,12 +27,16 @@ module.exports = (grunt) ->
             "lib/js/underscore/*"
             "lib/js/backbone/*"
           ]
+      jade:
+        files:
+          "out/jade/compiled.jade": ["src/jade/*.jade", "!src/jade/index.jade", "src/jade/index.jade"]
     jade:
       compileDev:
         options:
           pretty: yes
+          namespace: no
         files:
-          "out/index.html": "src/jade/*.jade"
+          "out/index.html": "out/jade/compiled.jade"
     less:
       options:
         sourceMap: yes
@@ -70,13 +72,14 @@ module.exports = (grunt) ->
     clean:
       out: ["out/"]
       build: ["build/"]
+      tmpJade: ["out/jade/"]
     watch:
       coffee:
         files: ["src/coffee/*.coffee"]
         tasks: ["coffee:compileDev"]
       jade:
         files: ["src/jade/*.jade"]
-        tasks: ["jade"]
+        tasks: ["concat:jade", "jade"]
       less:
         files: ["src/less/*.less"]
         tasks: ["less"]
@@ -113,5 +116,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks("grunt-contrib-compress")
 
   # Default task.
-  grunt.registerTask('default', ["clean:out", "coffee:compileDev", "jade:compileDev", "less", "concat:libraries", "copy", "connect:serveDev", "watch"])
-  grunt.registerTask('dist', ["clean", "coffee:compileDev", "jade:compileDev", "less", "concat:libraries", "copy", "compress"])
+  grunt.registerTask('default', ["clean:out", "coffee:compileDev", "concat:jade", "jade:compileDev", "clean:tmpJade", "less", "concat:libraries", "copy", "connect:serveDev", "watch"])
+  grunt.registerTask('dist', ["clean", "coffee:compileDev", "concat:jade", "jade:compileDev", "clean:tmpJade", "less", "concat:libraries", "copy", "compress"])

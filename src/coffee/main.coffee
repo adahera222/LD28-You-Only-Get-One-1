@@ -15,11 +15,32 @@ maxInitialStrength = 110
 minInitialSanity = 90
 maxInitialSanity = 110
 
+getContentFor = (day, phase) ->
+    currentDay = content[day]
+    currentPhase = currentDay[phase]
+    return currentPhase
+
 $ ->
     
     randBetween = (min, max) -> Math.random() * (max - min) + min
+    
+    Choice = Backbone.Model.extend {}
+    
+    ChoiceView = Backbone.View.extend
+        tagName: "li"
+        template: _.template $("#choice-template").html()
+        events:
+            "click button": "execute"
+        render: ->
+            @$el.html @template @model.attributes
+        execute: ->
+            @model.get("action")(currentPlayer)
 
     Player = Backbone.Model.extend
+        nextPhase: ->
+            @set phase: @get("phase") + 1
+        nextDay: ->
+            @set day: @get("day") + 1
         maxSelected: ->
             switch @get("selectedStat")
                 when "health" then @get "maxHealth"
@@ -47,6 +68,8 @@ $ ->
             sanity: maxSanity
             selectedStat: "health"
             gameStarted: yes
+            day: 0
+            phase: 0
 
     Statistic = Backbone.View.extend
         el: $("#statistic")
@@ -93,26 +116,14 @@ $ ->
         template: _.template $("#game-action").html()
         initialize: ->
             @listenTo @model, "change", @render
-        events:
-            "click #option-1 > button": "choice1"
-            "click #option-2 > button": "choice2"
-            "click #option-3 > button": "choice3"
         render: ->
-            @$el.html @template
-                bodytext: "Herp derp text"
-                choice1text: "Choose me!"
-                choice1icon: "fa-medkit"
-                choice2text: "No, choose me!"
-                choice2icon: "fa-pencil"
-                choice3text: "I'm secretly the best!"
-                choice3icon: "fa-tachometer"
+            currentContent = getContentFor @model.get("day"), @model.get("phase")
+            @$el.html @template bodytext: currentContent.text
+            for choice in currentContent.choices
+                view = new ChoiceView(model: new Choice(choice))
+                view.render()
+                @$("#choices").append(view.el)
             if @model.get("selectedStat") isnt "" then @$el.show() else @$el.hide()
-        choice1: ->
-            @model.set health: @model.get("health") - 5
-        choice2: ->
-            @model.set health: @model.get("health") - 5
-        choice3: ->
-            @model.set health: @model.get("health") - 5
     
     currentPlayer = new Player
     
