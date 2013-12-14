@@ -6,19 +6,21 @@ _.templateSettings =
 # TODO DISABLE
 leetHax0rMode = on
 
-# TODO CHANGE THESE
-minInitialHealth = 100
-maxInitialHealth = 100
-minInitialStrength = 100
-maxInitialStrength = 100
-minInitialSanity = 100
-maxInitialSanity = 100
-minEnemyHealthPerDifficulty = 25
-maxEnemyHealthPerDifficulty = 25
-minDamageFactor = 0.5
-maxDamageFactor = 0.5
-minEnemyStrengthPerDifficulty = 25
-maxEnemyStrengthPerDifficulty = 25
+# TODO TWEAK THESE
+minInitialHealth = 90
+maxInitialHealth = 110
+minInitialStrength = 90
+maxInitialStrength = 110
+minInitialSanity = 90
+maxInitialSanity = 110
+minEnemyHealthPerDifficulty = 20
+maxEnemyHealthPerDifficulty = 30
+minDamageFactor = 0.4
+maxDamageFactor = 0.6
+minEnemyStrengthPerDifficulty = 20
+maxEnemyStrengthPerDifficulty = 30
+minHealPerSanity = 0.3
+maxHealPerSanity = 0.5
 
 randBetween = (min, max) -> Math.random() * (max - min) + min
 
@@ -41,10 +43,13 @@ getContentFor = (day, phase) ->
     currentPhase = currentDay[phase]
     return currentPhase
 
-getDamageTakenBasedOnStrength = (strength, enemyDifficulty) ->
+getCombatBasedOnStrength = (strength, enemyDifficulty) ->
     enemyHealth = enemyDifficulty * randIntBetween(minEnemyHealthPerDifficulty, maxEnemyHealthPerDifficulty)
     enemyStrength = enemyDifficulty * randIntBetween(minEnemyStrengthPerDifficulty, maxEnemyStrengthPerDifficulty)
     damage = strength * randBetween(minDamageFactor, maxDamageFactor)
     enemyDamage = enemyStrength * randBetween(minDamageFactor, maxDamageFactor)
     numberOfStrikes = enemyHealth / damage
-    return numberOfStrikes * enemyDamage
+    return {
+        damage: Math.round(numberOfStrikes * enemyDamage)
+        insanity: Math.round(numberOfStrikes)
+    }

@@ -7,6 +7,8 @@ visible; you only get one that you can see.
 
 $ ->
     
+    lost = no
+    
     Choice = Backbone.Model.extend {}
     
     ChoiceView = Backbone.View.extend
@@ -21,7 +23,9 @@ $ ->
 
     Player = Backbone.Model.extend
         takeDamageFromEnemyWithDifficulty: (enemyDifficulty) ->
-            @add "health", -getDamageTakenBasedOnStrength @get("strength"), enemyDifficulty
+            {damage, insanity} = getCombatBasedOnStrength @get("strength"), enemyDifficulty
+            @add "health", -damage
+            @add "sanity", -insanity
         setPhase: (phase) ->
             @set phase: phase
         nextDay: ->
@@ -56,16 +60,40 @@ $ ->
             gameStarted: yes
             day: 0
             phase: "start"
+            lost: no
     
     currentPlayer = new Player
     
-    currentPlayer.on "change:health change:strength change:sanity", ->
-        if currentPlayer.get("health") < 0 or currentPlayer.get("strength") < 0 or currentPlayer.get("sanity") < 0
-            alert "You lost!!!!!!!!!!111!!!!!!!!!1onehundredandeleven!!!"
+    currentPlayer.on "change:health", ->
+        if currentPlayer.get("health") < 0
+            if not lost
+                alert "You died."
+                lost = yes
+                setTimeout ->
+                    currentPlayer.set(new Player().attributes)
+                , 0
         if currentPlayer.get("health") > currentPlayer.get "maxHealth"
             currentPlayer.set health: currentPlayer.get "maxHealth"
+    
+    currentPlayer.on "change:strength", ->
+        if currentPlayer.get("strength") < 0
+            if not lost
+                alert "You ran out of strength (whatever that means)."
+                lost = yes
+                setTimeout ->
+                    currentPlayer.set(new Player().attributes)
+                , 0
         if currentPlayer.get("strength") > currentPlayer.get "maxStrength"
             currentPlayer.set strength: currentPlayer.get "maxStrength"
+    
+    currentPlayer.on "change:sanity", ->
+        if currentPlayer.get("sanity") < 0
+            if not lost
+                alert "You went insane."
+                lost = yes
+                setTimeout ->
+                    currentPlayer.set(new Player().attributes)
+                , 0
         if currentPlayer.get("sanity") > currentPlayer.get "maxSanity"
             currentPlayer.set sanity: currentPlayer.get "maxSanity"
 
