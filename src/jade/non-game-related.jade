@@ -21,9 +21,12 @@ mixin navbar(gameTitle)
                 a.navbar-brand(href="#")= gameTitle
             div.navbar-collapse.collapse
                 ul.nav.navbar-nav
-                    li.active: a(href="#") Home
-                    li: a(href="#about") About
-                    li: a(href="#contact") Contact
+                    li: a(href="#about")
+                        i.fa.fa-question-circle
+                        |  About
+                    li: a(href="javascript:location.reload()")
+                        i.fa.fa-refresh
+                        |  Restart
 
 mixin js()
     script(src="js/libs.js")

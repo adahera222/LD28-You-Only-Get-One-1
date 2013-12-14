@@ -5,24 +5,7 @@ visible; you only get one that you can see.
 
 ###
 
-_.templateSettings =
-  interpolate : /\{\{(.+?)\}\}/g
-
-minInitialHealth = 90
-maxInitialHealth = 110
-minInitialStrength = 90
-maxInitialStrength = 110
-minInitialSanity = 90
-maxInitialSanity = 110
-
-getContentFor = (day, phase) ->
-    currentDay = content[day]
-    currentPhase = currentDay[phase]
-    return currentPhase
-
 $ ->
-    
-    randBetween = (min, max) -> Math.random() * (max - min) + min
     
     Choice = Backbone.Model.extend {}
     
@@ -37,10 +20,12 @@ $ ->
             @model.get("action")(currentPlayer)
 
     Player = Backbone.Model.extend
-        nextPhase: ->
-            @set phase: @get("phase") + 1
+        takeDamageFromEnemyWithDifficulty: (enemyDifficulty) ->
+            @add "health", -getDamageTakenBasedOnStrength @get("strength"), enemyDifficulty
+        setPhase: (phase) ->
+            @set phase: phase
         nextDay: ->
-            @set day: @get("day") + 1
+            @set day: @get("day") + 1, phase: "start"
         maxSelected: ->
             switch @get("selectedStat")
                 when "health" then @get "maxHealth"
@@ -53,23 +38,36 @@ $ ->
                 when "strength" then @get "strength"
                 when "sanity" then @get "sanity"
                 else console.error "AAAAAAAAAAAAAAAAAAAAAAA"
+        add: (attr, modifier) ->
+            modification = {}
+            modification[attr] = @get(attr)+modifier
+            @set modification
         defaults: ->
-            maxHealth = Math.round(randBetween(minInitialHealth, maxInitialHealth))
-            maxStrength = Math.round(randBetween(minInitialStrength, maxInitialStrength))
-            maxSanity = Math.round(randBetween(minInitialSanity, maxInitialSanity))
+            maxHealth = randIntBetween(minInitialHealth, maxInitialHealth)
+            maxStrength = randIntBetween(minInitialStrength, maxInitialStrength)
+            maxSanity = randIntBetween(minInitialSanity, maxInitialSanity)
             maxHealth: maxHealth
             maxStrength: maxStrength
             maxSanity: maxSanity
-            minHealth: 0
-            minStrength: 0
-            minSanity: 0
             health: maxHealth
             strength: maxStrength
             sanity: maxSanity
             selectedStat: "health"
             gameStarted: yes
             day: 0
-            phase: 0
+            phase: "start"
+    
+    currentPlayer = new Player
+    
+    currentPlayer.on "change:health change:strength change:sanity", ->
+        if currentPlayer.get("health") < 0 or currentPlayer.get("strength") < 0 or currentPlayer.get("sanity") < 0
+            alert "You lost!!!!!!!!!!111!!!!!!!!!1onehundredandeleven!!!"
+        if currentPlayer.get("health") > currentPlayer.get "maxHealth"
+            currentPlayer.set health: currentPlayer.get "maxHealth"
+        if currentPlayer.get("strength") > currentPlayer.get "maxStrength"
+            currentPlayer.set strength: currentPlayer.get "maxStrength"
+        if currentPlayer.get("sanity") > currentPlayer.get "maxSanity"
+            currentPlayer.set sanity: currentPlayer.get "maxSanity"
 
     Statistic = Backbone.View.extend
         el: $("#statistic")
@@ -81,7 +79,13 @@ $ ->
                 selected: @model.get("selectedStat")
                 current: @model.currentSelected()
                 maximum: @model.maxSelected()
+                health: if leetHax0rMode then @model.get("health") else 0
+                strength: if leetHax0rMode then @model.get("strength") else 0
+                sanity: if leetHax0rMode then @model.get("sanity") else 0
+                extraClass: getStatBarClass(@model.currentSelected())
             if @model.get("selectedStat") isnt "" then @$el.show() else @$el.hide()
+            if leetHax0rMode
+                @$(".hax-only").show()
     
     StatChooser = Backbone.View.extend
         el: $("#stat-chooser")
@@ -124,8 +128,6 @@ $ ->
                 view.render()
                 @$("#choices").append(view.el)
             if @model.get("selectedStat") isnt "" then @$el.show() else @$el.hide()
-    
-    currentPlayer = new Player
     
     stat = new Statistic
         model: currentPlayer

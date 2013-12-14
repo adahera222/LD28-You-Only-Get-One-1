@@ -5,13 +5,17 @@ mixin game-action()
         ul#choices.list-unstyled
     
     div#choice-template(style="display:none;")
-        button.btn.btn-primary.btn-lg(type="button")
+        button.btn.btn-success.btn-lg(type="button")
             i.fa.fa-fw(class="{{ icon }}")
             |  {{ text }}
 
 mixin statistic()
     div#statistic(style="display:none;")
-        div.page-header
-            h1 {{ selected }}
+        h2 {{ selected }}
         div.progress
-            div.progress-bar(role="progressbar", style="width: {{ 100 * current / maximum }}%;")
+            div.progress-bar(role="progressbar", style="width: {{ 100 * current / maximum }}%;", class="{{extraClass}}")
+        div.hax-only(style="display:none;")
+            ul.list-unstyled
+                li Health: {{ health }}
+                li Strength: {{ strength }}
+                li Sanity: {{ sanity }}
