@@ -121,7 +121,7 @@ content[3] =
         choices: [
             {
                 text: "Okay then, I will."
-                icon: "fa-github"
+                icon: "fa-code-fork"
                 action: (player) ->
                     window.location = "http://github.com/mathphreak/LD28"
             }
