@@ -1,4 +1,4 @@
-What little of this is original (so basically Gruntfile.coffee, parts of index.jade, and all of main.coffee) is under...
+Original parts (most of src/) are under:
 
 The MIT License (MIT)
 

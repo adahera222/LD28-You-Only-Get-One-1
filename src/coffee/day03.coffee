@@ -123,6 +123,6 @@ content[3] =
                 text: "Okay then, I will."
                 icon: "fa-code-fork"
                 action: (player) ->
-                    window.location = "http://github.com/mathphreak/LD28"
+                    window.location = "https://github.com/mathphreak/LD28-You-Only-Get-One"
             }
         ]
