@@ -3,10 +3,8 @@ content = []
 _.templateSettings =
   interpolate : /\{\{(.+?)\}\}/g
 
-# TODO DISABLE
-leetHax0rMode = on
+leetHax0rMode = off
 
-# TODO TWEAK THESE
 minInitialHealth = 90
 maxInitialHealth = 110
 minInitialStrength = 90

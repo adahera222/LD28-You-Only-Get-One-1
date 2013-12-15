@@ -21,12 +21,37 @@ mixin navbar(gameTitle)
                 a.navbar-brand(href="#")= gameTitle
             div.navbar-collapse.collapse
                 ul.nav.navbar-nav
-                    li: a(href="#about")
+                    li: a(href="#about",data-target="#about",data-toggle="modal")
                         i.fa.fa-question-circle
                         |  About
-                    li: a(href="javascript:location.reload()")
+                    li: a(href="javascript:restart()")
                         i.fa.fa-refresh
                         |  Restart
+    div.modal.fade#about(tabindex="-1")
+        div.modal-dialog
+            div.modal-content
+                div.modal-header
+                    button.close(type="button",data-dismiss="modal") &times;
+                    h4.modal-title About 
+                        = gameTitle
+                div.modal-body
+                    p
+                        = gameTitle
+                        |  was made with a bit of care and a lot of apathy for Ludum Dare 28 by 
+                        a(href="http://mathphreak.github.io") mathphreak
+                        |  and using:
+                        ul
+                            li Twitter Bootstrap
+                            li Font Awesome
+                            li jQuery
+                            li underscore.js
+                            li Backbone.js
+                            li Sublime Text 3
+                            li Grunt
+                    p.
+                        This is my first Ludum Dare entry, so give me a break, OK?
+                    p.
+                        This game is dedicated to the victims of the Arapahoe High School shooting on December 13, 2013.
 
 mixin js()
     script(src="js/libs.js")

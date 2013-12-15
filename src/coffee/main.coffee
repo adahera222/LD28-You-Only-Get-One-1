@@ -5,6 +5,8 @@ visible; you only get one that you can see.
 
 ###
 
+window.restart = ->
+
 $ ->
     
     lost = no
@@ -56,33 +58,31 @@ $ ->
             health: maxHealth
             strength: maxStrength
             sanity: maxSanity
-            selectedStat: "health"
-            gameStarted: yes
+            selectedStat: ""
+            gameStarted: no
             day: 0
             phase: "start"
             lost: no
     
     currentPlayer = new Player
     
+    window.restart = ->
+        setTimeout ->
+            currentPlayer.set(new Player().attributes)
+        , 0
+    
     currentPlayer.on "change:health", ->
         if currentPlayer.get("health") < 0
             if not lost
                 alert "You died."
                 lost = yes
-                setTimeout ->
-                    currentPlayer.set(new Player().attributes)
-                , 0
+                restart()
         if currentPlayer.get("health") > currentPlayer.get "maxHealth"
             currentPlayer.set health: currentPlayer.get "maxHealth"
     
     currentPlayer.on "change:strength", ->
         if currentPlayer.get("strength") < 0
-            if not lost
-                alert "You ran out of strength (whatever that means)."
-                lost = yes
-                setTimeout ->
-                    currentPlayer.set(new Player().attributes)
-                , 0
+            currentPlayer.set strength: 0
         if currentPlayer.get("strength") > currentPlayer.get "maxStrength"
             currentPlayer.set strength: currentPlayer.get "maxStrength"
     
@@ -103,17 +103,18 @@ $ ->
         initialize: ->
             @listenTo @model, "change", @render
         render: ->
-            @$el.html @template
-                selected: @model.get("selectedStat")
-                current: @model.currentSelected()
-                maximum: @model.maxSelected()
-                health: if leetHax0rMode then @model.get("health") else 0
-                strength: if leetHax0rMode then @model.get("strength") else 0
-                sanity: if leetHax0rMode then @model.get("sanity") else 0
-                extraClass: getStatBarClass(@model.currentSelected())
-            if @model.get("selectedStat") isnt "" then @$el.show() else @$el.hide()
-            if leetHax0rMode
-                @$(".hax-only").show()
+            if @model.get("selectedStat") isnt ""
+                @$el.show()
+                @$el.html @template
+                    selected: @model.get("selectedStat")
+                    current: @model.currentSelected()
+                    maximum: @model.maxSelected()
+                    health: if leetHax0rMode then @model.get("health") else 0
+                    strength: if leetHax0rMode then @model.get("strength") else 0
+                    sanity: if leetHax0rMode then @model.get("sanity") else 0
+                    extraClass: getStatBarClass(@model.currentSelected())
+            else
+                @$el.hide()
     
     StatChooser = Backbone.View.extend
         el: $("#stat-chooser")
