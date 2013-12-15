@@ -1,56 +1,139 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Ld28-you-only-get-one by mathphreak</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <!-- adapted from Bootstrap Theme sample at http://getbootstrap.com/examples/theme/-->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>YOGO</title>
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/font-awesome.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Ld28-you-only-get-one</h1>
-        <p>YOGO</p>
-
-        <p class="view"><a href="https://github.com/mathphreak/LD28-You-Only-Get-One">View the Project on GitHub <small>mathphreak/LD28-You-Only-Get-One</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/mathphreak/LD28-You-Only-Get-One/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/mathphreak/LD28-You-Only-Get-One/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/mathphreak/LD28-You-Only-Get-One">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a name="mathphreakld28-you-only-get-one" class="anchor" href="#mathphreakld28-you-only-get-one"><span class="octicon octicon-link"></span></a>mathphreak/LD28-You-Only-Get-One</h1>
-
-<p>My miserable attempt at an LD28 entry.</p>
-
-<p>Deal with it.</p>
-
-<h2>
-<a name="development" class="anchor" href="#development"><span class="octicon octicon-link"></span></a>Development</h2>
-
-<pre><code>npm install
-grunt
-</code></pre>
-
-<p>Vaguely plot-shaped substance resides under <code>src/coffee/day0x.coffee</code>; that's where all the fixing would go if anybody
-actually wanted to fix it.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/mathphreak">mathphreak</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+    <div role="navigation" class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="navbar-brand">YOGO</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#about" data-target="#about" data-toggle="modal"><i class="fa fa-question-circle"></i> About</a></li>
+            <li><a href="javascript:restart()"><i class="fa fa-refresh"></i> Restart</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+    <div id="about" tabindex="-1" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close">&times;</button>
+            <h4 class="modal-title">About YOGO
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>YOGO was made with a bit of care and a lot of apathy for Ludum Dare 28 by <a href="http://mathphreak.github.io">mathphreak</a> and using:
+              <ul>
+                <li>Twitter Bootstrap</li>
+                <li>Font Awesome</li>
+                <li>jQuery</li>
+                <li>underscore.js</li>
+                <li>Backbone.js</li>
+                <li>Sublime Text 3</li>
+                <li>Grunt</li>
+              </ul>
+            </p>
+            <p>This is my first Ludum Dare entry, so give me a break, OK?</p>
+            <p>
+              This game is dedicated to the victims of the Arapahoe High School shooting on December 13, 2013.
+              
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div id="game-intro" class="jumbotron">
+        <h1>YOGO</h1>
+        <p>
+          You have three attributes: health, strength, and sanity.  All three are automatically tracked by the game,
+          but <strong class="text-success">you only get one</strong> of them that you can see.
+        </p>
+        <p>
+          <button id="start-game" role="button" class="btn btn-primary btn-lg">Start game! <i class="fa fa-flip-horizontal fa-truck"></i></button>
+        </p>
+      </div>
+      <div id="stat-chooser" style="display:none;" class="well well-lg">
+        <h1>Choose your stat!</h1>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Health
+                  <button type="button" class="btn btn-primary btn-xs pull-right health">Choose <i class="fa fa-angle-double-right"></i></button>
+                </h3>
+              </div>
+              <div class="panel-body">
+                <p>Your health is the most vital attribute; when you reach 0 health, you die.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Strength
+                  <button type="button" class="btn btn-primary btn-xs pull-right strength">Choose <i class="fa fa-angle-double-right"></i></button>
+                </h3>
+              </div>
+              <div class="panel-body">
+                <p>
+                  Strength controls how quickly you kill enemies, which in turn controls how much damage
+                  you take while in combat.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Sanity
+                  <button type="button" class="btn btn-primary btn-xs pull-right sanity">Choose <i class="fa fa-angle-double-right"></i></button>
+                </h3>
+              </div>
+              <div class="panel-body">
+                <p>
+                  Only having two attributes felt lame, so I had to add a third one; this doesn't really
+                  impact much, nor does it change drastically throughout the game, but getting to 0 is
+                  bad.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="game-action" style="display:none;" class="jumbotron">
+        <p>{{ bodytext }}</p>
+        <ul id="choices" class="list-unstyled"></ul>
+      </div>
+      <div id="choice-template" style="display:none;">
+        <button type="button" class="btn btn-success btn-lg"><i class="fa fa-fw {{ icon }}"></i> {{ text }}</button>
+      </div>
+      <div id="statistic" style="display:none;">
+        <h2>{{ selected }}</h2>
+        <div class="progress">
+          <div role="progressbar" style="width: {{ 100 * current / maximum }}%;" class="progress-bar {{extraClass}}"></div>
+        </div>
+        <div style="display:none;" class="hax-only">
+          <ul class="list-unstyled">
+            <li>Health: {{ health }}</li>
+            <li>Strength: {{ strength }}</li>
+            <li>Sanity: {{ sanity }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script src="js/libs.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
