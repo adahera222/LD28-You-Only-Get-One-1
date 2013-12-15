@@ -1,6 +1,6 @@
 content[6] =
     start:
-        text: "You can tell that you're almost there.  You can read the title on the fortress.  Which isn't even relevant, as you no longer care about anything except being done with the game so you can give me my 0.0 on every single category, since the theme wasn't \"fourth wall?  What fourth wall?  What on Earth are you talking about?\""
+        text: "You can tell that you're almost there.  You can read the title on the fortress.  Which isn't even relevant, as you no longer care about anything except being done with the game so you can give me my 0.0 on every single category, since the theme wasn't \"You Only Can Make Crappy Games!\""
         choices: [
             {
                 text: "Run"
